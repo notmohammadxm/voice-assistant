@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>دستیار هوشمند صوتی</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol viewBox="0 0 24 24" id="x"><path d="M7 7l10 10M17 7L7 17"/></symbol>
+  <symbol viewBox="0 0 24 24" id="tray"><path d="M5 12h14"/></symbol>
+  <symbol viewBox="0 0 24 24" id="help"><path d="M9.6 9.4a2.7 2.7 0 1 1 4.6 1.9c-.9.9-2.2 1.2-2.2 2.6M12 17.4v.1M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Z"/></symbol>
+  <symbol viewBox="0 0 24 24" id="vol"><path d="M4.5 9.5h3L12 6v12l-4.5-3.5h-3zM15.8 9.1a4 4 0 0 1 0 5.8M18.4 6.8a7.2 7.2 0 0 1 0 10.4"/></symbol>
+  <symbol viewBox="0 0 24 24" id="mic"><path d="M12 15.5A3.5 3.5 0 0 0 15.5 12V7a3.5 3.5 0 0 0-7 0v5a3.5 3.5 0 0 0 3.5 3.5ZM18 11.7a6 6 0 0 1-12 0M12 17.7V21M8.8 21h6.4"/></symbol>
+  <symbol viewBox="0 0 24 24" id="gear"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09A1.65 1.65 0 0 0 19.4 15z"/></symbol>
+  <symbol viewBox="0 0 24 24" id="gh"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></symbol>
+  <symbol viewBox="0 0 24 24" id="web"><path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18ZM3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9c-2.5-2.7-3.8-5.7-3.8-9S9.5 5.7 12 3Z"/></symbol>
+  <symbol viewBox="0 0 24 24" id="heart"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z"/></symbol>
+  <symbol viewBox="0 0 24 24" id="yt"><path d="M3 8a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v8a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3ZM10 9.5v5l4.5-2.5Z"/></symbol>
+  <symbol viewBox="0 0 24 24" id="refresh"><path d="M23 4v6h-6M20.5 15a9 9 0 1 1-2.1-9.4L23 10"/></symbol>
+  <symbol viewBox="0 0 24 24" id="play"><path d="M7 5v14l11-7z"/></symbol>
+  <symbol viewBox="0 0 24 24" id="power"><path d="M18.4 6.6a9 9 0 1 1-12.8 0M12 2v10"/></symbol>
+  <symbol viewBox="0 0 24 24" id="win"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M3 9h18"/></symbol>
+  <symbol viewBox="0 0 24 24" id="monitor"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></symbol>
+  <symbol viewBox="0 0 24 24" id="palette"><path d="M12 3a9 9 0 0 0 0 18h1.6a1.9 1.9 0 0 0 1.1-3.45l-.6-.44a1.9 1.9 0 0 1 1.12-3.42H17A4 4 0 0 0 21 9.7 7.9 7.9 0 0 0 12 3Z"/><circle cx="7.5" cy="10" r=".8"/><circle cx="10" cy="7" r=".8"/><circle cx="14" cy="7" r=".8"/></symbol>
+  <symbol viewBox="0 0 24 24" id="speaker"><path d="M4 9h3l5-3v12l-5-3H4zM16 9.1a4 4 0 0 1 0 5.8M18.8 6.8a7.2 7.2 0 0 1 0 10.4"/></symbol>
+  <symbol viewBox="0 0 24 24" id="key"><path d="M7 14a5 5 0 1 1 3.54-8.54L20 15v4h-4v-3h-3v3H9l-2.54-2.54A5 5 0 0 1 7 14Z"/><path d="M7 9h.01"/></symbol>
+  <symbol viewBox="0 0 24 24" id="rocket"><path d="M14 4c2.8 0 5 2.2 5 5 0 4-3 7-6 9l-2-2c2-3 5-6 3-12Z"/><path d="M10 14 6 18M7 13l-3 1 3 3"/><circle cx="15" cy="9" r="1.1"/></symbol>
+  <symbol viewBox="0 0 24 24" id="sliders"><path d="M4 6h16M4 12h16M4 18h16M8 4v4M15 10v4M11 16v4"/></symbol>
+  <symbol viewBox="0 0 24 24" id="reset"><path d="M4 7v5h5M20 17v-5h-5M5.8 12a7 7 0 0 1 12.5-4M18.2 12a7 7 0 0 1-12.5 4"/></symbol>
+  <symbol viewBox="0 0 24 24" id="chev"><path d="m7 9 5 5 5-5"/></symbol>
+  <symbol viewBox="0 0 24 24" id="check"><path d="m5 12.5 4 4L19 7"/></symbol>
+</svg>
+
+<div class="app">
+  <header class="bar">
+    <button class="g" id="trayBtn" title="ارسال به Tray"><svg><use href="#tray"/></svg></button>
+    <div style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+      <span class="ttl" style="margin: 0;">دستیار هوشمند صوتی</span>
+      <img src="assets/logo.png" alt="لوگو" style="width: 20px; height: 20px; border-radius: 5px; object-fit: contain; pointer-events: none;" onerror="this.style.display='none'">
+    </div>
+    <button class="g x" id="closeBtn" title="بستن"><svg><use href="#x"/></svg></button>
+  </header>
+
+  <main class="hero">
+    <button class="orb" id="orb" title="برای تست حالت‌ها کلیک کنید" aria-label="دستیار"><canvas></canvas></button>
+    <div class="st" id="st" data-s="0"><b></b><span id="stt">آماده</span></div>
+    <button class="viz" id="vz" title="تنظیم صدا" aria-label="تنظیم صدا"><small>صدای پاسخ</small><div id="viz"></div></button>
+  </main>
+
+  <footer class="tools">
+    <div class="grp">
+      <button class="b" id="hlp" title="راهنما"><svg><use href="#help"/></svg></button>
+      <button class="b" id="snd" title="صدای برنامه"><svg><use href="#vol"/></svg></button>
+    </div>
+    <button class="b mic on" id="micBtn" title="میکروفون فعال"><svg><use href="#mic"/></svg></button>
+    <div class="grp end"><button class="b" id="set" title="تنظیمات"><svg><use href="#gear"/></svg></button></div>
+  </footer>
+</div>
+
+<dialog id="dv">
+  <div class="dh"><svg><use href="#vol"/></svg><h2>تنظیم صدا</h2><button class="g" data-x title="بستن"><svg><use href="#x"/></svg></button></div>
+  <div class="db">
+    <div class="vr"><svg><use href="#vol"/></svg><input id="rng" type="range" min="0" max="100" value="68"><span id="vn">۶۸</span></div>
+    <button class="act" id="tst"><svg><use href="#play"/></svg><span>پخش صدای تست</span></button>
+  </div>
+</dialog>
+
+<dialog id="dh">
+  <div class="dh"><svg><use href="#help"/></svg><h2>راهنما</h2><button class="g" data-x title="بستن"><svg><use href="#x"/></svg></button></div>
+  <div class="db" style="padding: 14px 16px; gap: 10px;">
+    <p class="lead" style="font-size: 11.5px; line-height: 1.6; margin: 0;">
+      فرمان‌ها را بگویید؛ دستیار بلافاصله می‌شنود، اجرا می‌کند و آفلاین پاسخ می‌دهد.
+    </p>
+
+    <div style="background: var(--glass-2); border: 1px solid var(--ln); border-radius: 12px; padding: 10px 12px; font-size: 10.5px; line-height: 1.7; color: var(--tx);">
+      <strong style="color: var(--ac); display: block; margin-bottom: 2px;">⚡ نحوه کار و فرامین پرکاربرد:</strong>
+      • <strong>میکروفون فعال:</strong> همیشه آماده دریافت گفتار بدون نیاز به کلیک مداوم<br>
+      • <strong>سیستم و ابزار:</strong> «ساعت چنده»، «صدا رو کم کن»، «تایمر ۵ دقیقه»<br>
+      • <strong>برنامه و وب:</strong> «نوت‌پد باز کن»، «پوشه دانلود»، «گوگل رو سرچ کن»
+    </div>
+
+    <div class="upd" style="padding: 9px 12px; border-radius: 14px;">
+      <div><small style="font-size: 10.5px;">نسخهٔ ۰.۱.۳</small><strong id="ut" style="font-size: 11.5px;">شما به‌روز هستید</strong></div>
+      <button class="act sm" id="upd"><svg><use href="#refresh"/></svg><span>بررسی</span><em class="dots"><i></i><i></i><i></i></em></button>
+    </div>
+
+    <div class="links" style="display: flex; flex-direction: column; gap: 7px; margin-top: 2px;">
+      <a href="https://github.com/notmohammadxm/voice-assistant" target="_blank" class="help-link-btn" style="text-decoration: none;">
+        <span><svg><use href="#gh"/></svg></span>
+        <strong style="font-size: 11.5px; font-weight: 500;">گیت‌هاب</strong>
+      </a>
+      <a href="https://daramet.com/mohammadkhxm" target="_blank" class="help-link-btn" style="text-decoration: none;">
+        <span class="pink"><svg><use href="#heart"/></svg></span>
+        <strong style="font-size: 11.5px; font-weight: 500;">حمایت</strong>
+      </a>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="de">
+  <div class="dh"><svg><use href="#x"/></svg><h2>خروج از برنامه</h2><button class="g" data-x title="بستن"><svg><use href="#x"/></svg></button></div>
+  <div class="db">
+    <p class="lead">آیا مطمئن هستید که می‌خواهید از دستیار خارج شوید؟</p>
+    <button class="act bad" id="quit"><svg><use href="#power"/></svg><span>خروج</span></button>
+    <button class="act pri" id="toTray"><svg><use href="#win"/></svg><span>ارسال به Tray</span></button>
+    <button class="act" data-x><svg><use href="#x"/></svg><span>انصراف</span></button>
+  </div>
+</dialog>
+
+<dialog id="settings" class="settings-dialog">
+  <div class="settings-head dh">
+    <div class="settings-title"><span class="settings-head-icon"><svg><use href="#gear"/></svg></span><div><h2>تنظیمات</h2><small>ظاهر و رفتار فعلی برنامه</small></div></div>
+    <button class="g x" data-x title="بستن"><svg><use href="#x"/></svg></button>
+  </div>
+  <div class="settings-scroll">
+    <section class="set-section">
+      <div class="set-section-title"><span class="section-icon"><svg><use href="#palette"/></svg></span><div><strong>تم و ظاهر</strong><small>تم روشن/تیره و رنگ اصلی برنامه</small></div></div>
+      <div class="mode-grid" id="themeMode">
+        <button class="choice" data-mode="dark"><b>تیره</b><span>دارک</span></button>
+        <button class="choice" data-mode="light"><b>روشن</b><span>لایت</span></button>
+        <button class="choice" data-mode="system"><b>سیستم</b><span>خودکار</span></button>
+      </div>
+      <div class="sub-label">رنگ در حالت تیره</div>
+      <div class="accent-grid" id="darkAccents">
+        <button class="accent" data-accent="default"><i></i><span>پیشفرض تم</span></button>
+        <button class="accent" data-accent="green"><i></i><span>سبز</span></button>
+        <button class="accent" data-accent="red"><i></i><span>قرمز</span></button>
+        <button class="accent" data-accent="terra"><i></i><span>تراکوتا</span></button>
+        <button class="accent" data-accent="purple"><i></i><span>بنفش</span></button>
+        <button class="accent" data-accent="blue"><i></i><span>آبی</span></button>
+      </div>
+      <div class="sub-label">رنگ در حالت روشن</div>
+      <div class="accent-grid" id="lightAccents">
+        <button class="accent" data-accent="default"><i></i><span>پیشفرض تم</span></button>
+        <button class="accent" data-accent="green"><i></i><span>سبز</span></button>
+        <button class="accent" data-accent="red"><i></i><span>قرمز</span></button>
+        <button class="accent" data-accent="terra"><i></i><span>تراکوتا</span></button>
+        <button class="accent" data-accent="purple"><i></i><span>بنفش</span></button>
+        <button class="accent" data-accent="blue"><i></i><span>آبی</span></button>
+      </div>
+    </section>
+
+    <section class="set-section">
+      <div class="set-section-title"><span class="section-icon"><svg><use href="#speaker"/></svg></span><div><strong>خروجی صدا</strong><small>اسپیکر، ولوم و تست پاسخ</small></div></div>
+      <div class="device-row">
+        <label>اسپیکر</label>
+        <div class="device-select" data-device-select="output">
+          <button type="button" class="device-trigger" id="outDeviceTrigger" aria-haspopup="listbox" aria-expanded="false">
+            <span class="device-trigger-icon"><svg><use href="#speaker"/></svg></span><span class="device-trigger-label" id="outDeviceLabel">خروجی پیشفرض سیستم</span><svg class="device-chevron"><use href="#chev"/></svg>
+          </button>
+          <div class="device-menu" id="outDeviceMenu" role="listbox" aria-label="انتخاب اسپیکر"></div>
+        </div>
+      </div>
+      <div class="volume-card"><div class="volume-top"><span>ولوم خروجی</span><b id="outVolText">۶۸٪</b></div><div class="range-wrap"><svg><use href="#vol"/></svg><input id="outVol" type="range" min="0" max="100" value="68"><div class="range-fill"></div></div></div>
+      <label class="switch-row"><span><strong>صدای برنامه</strong><small>قطع/وصل کردن صدای پاسخ</small></span><input id="soundEnabled" class="switch" type="checkbox" checked><i></i></label>
+      <button class="act wide" id="outTest"><svg><use href="#play"/></svg><span>پخش صدای تست</span></button>
+    </section>
+
+    <section class="set-section">
+      <div class="set-section-title"><span class="section-icon"><svg><use href="#mic"/></svg></span><div><strong>ورودی صدا</strong><small>میکروفون، سطح ورودی و تست</small></div></div>
+      <div class="device-row">
+        <label>میکروفون</label>
+        <div class="device-select" data-device-select="input">
+          <button type="button" class="device-trigger" id="inDeviceTrigger" aria-haspopup="listbox" aria-expanded="false">
+            <span class="device-trigger-icon"><svg><use href="#mic"/></svg></span><span class="device-trigger-label" id="inDeviceLabel">میکروفون پیشفرض سیستم</span><svg class="device-chevron"><use href="#chev"/></svg>
+          </button>
+          <div class="device-menu" id="inDeviceMenu" role="listbox" aria-label="انتخاب میکروفون"></div>
+        </div>
+      </div>
+      <div class="volume-card"><div class="volume-top"><span>ولوم ورودی</span><b id="inVolText">۷۰٪</b></div><div class="range-wrap"><svg><use href="#mic"/></svg><input id="inVol" type="range" min="0" max="100" value="70"><div class="range-fill"></div></div></div>
+      <label class="switch-row"><span><strong>میکروفون</strong><small>وضعیت دکمهٔ میکروفون اصلی</small></span><input id="micEnabled" class="switch" type="checkbox" checked><i></i></label>
+      <div class="mic-test">
+        <div class="meter-head"><span id="micTestStatus">آمادهٔ تست</span><small>سطح زنده</small></div>
+        <div class="meter"><i id="micMeter"></i></div>
+        <button class="act wide" id="micTest"><svg><use href="#mic"/></svg><span>تست میکروفون</span></button>
+      </div>
+    </section>
+
+    <section class="set-section">
+      <div class="set-section-title"><span class="section-icon"><svg><use href="#rocket"/></svg></span><div><strong>دستیار صوتی</strong><small>تشخیص گفتار رایگان و بدون نیاز به کلید API</small></div></div>
+      <div class="volume-card"><div class="volume-top"><span>آستانهٔ سکوت (پایان خودکار گفتار)</span><b id="silenceMsText">۲٫۰ ثانیه</b></div>
+        <div class="range-wrap"><svg><use href="#help"/></svg><input id="silenceMs" type="range" min="500" max="5000" step="100" value="2000"><div class="range-fill"></div></div></div>
+      <div class="volume-card"><div class="volume-top"><span>حساسیت تشخیص صدا (VAD)</span></div>
+        <div class="range-wrap"><svg><use href="#mic"/></svg><input id="vadThreshold" type="range" min="2" max="100" step="1" value="15"><div class="range-fill"></div></div></div>
+      <label class="field-row"><span><strong>صدای پاسخ (Piper TTS)</strong><small>کاملاً آفلاین اجرا می‌شود</small></span>
+        <select id="ttsVoice" class="text-input">
+          <option value="amir-medium">Amir (مرد، متوسط)</option>
+        </select>
+      </label>
+      <p class="settings-note">تشخیص گفتار رایگان است و نیاز به کلید یا ثبت‌نام ندارد؛ تنظیمات این بخش به‌صورت رمزنگاری‌شده روی دیسک ذخیره می‌شوند.</p>
+    </section>
+
+    <section class="set-section">
+      <div class="set-section-title"><span class="section-icon"><svg><use href="#key"/></svg></span><div><strong>کلیدهای میانبر</strong><small>برای هر مورد بزنید و سپس ترکیب کلید را فشار دهید</small></div></div>
+      <div class="shortcut-list">
+        <div class="shortcut-row"><span><strong>میکروفون</strong><small>روشن/خاموش</small></span><button class="key-btn" data-shortcut="mic">Space</button></div>
+        <div class="shortcut-row"><span><strong>صدای برنامه</strong><small>Mute / Unmute</small></span><button class="key-btn" data-shortcut="mute">M</button></div>
+        <div class="shortcut-row"><span><strong>شروع/پایان گفتار</strong><small>مثل کلیک روی میکروفون</small></span><button class="key-btn" data-shortcut="orbNext">O</button></div>
+        <div class="shortcut-row"><span><strong>تنظیم صدا</strong><small>باز کردن پنل صدا</small></span><button class="key-btn" data-shortcut="volume">V</button></div>
+        <div class="shortcut-row"><span><strong>راهنما</strong><small>باز کردن راهنما</small></span><button class="key-btn" data-shortcut="help">H</button></div>
+        <div class="shortcut-row"><span><strong>تنظیمات</strong><small>باز کردن همین صفحه</small></span><button class="key-btn" data-shortcut="settings">Ctrl + ,</button></div>
+        <div class="shortcut-row"><span><strong>ارسال به Tray</strong><small>مخفی کردن برنامه</small></span><button class="key-btn" data-shortcut="tray">Ctrl + Shift + T</button></div>
+        <div class="shortcut-row"><span><strong>خروج</strong><small>باز کردن/اجرای خروج</small></span><button class="key-btn" data-shortcut="quit">Ctrl + Q</button></div>
+      </div>
+    </section>
+
+    <section class="set-section">
+      <div class="set-section-title"><span class="section-icon"><svg><use href="#rocket"/></svg></span><div><strong>رفتار برنامه</strong><small>تنظیمات مربوط به اجرای فعلی</small></div></div>
+      <label class="switch-row"><span><strong>اجرا با روشن شدن ویندوز</strong><small>برنامه به‌صورت خودکار اجرا شود</small></span><input id="startWithWindows" class="switch" type="checkbox"><i></i></label>
+      <label class="switch-row"><span><strong>خروج بدون پرسش</strong><small>هنگام بستن، پنجرهٔ تأیید نشان داده نشود</small></span><input id="quitWithoutPrompt" class="switch" type="checkbox"><i></i></label>
+      <label class="switch-row"><span><strong>واکنش Orb به نشانگر</strong><small>نور پس‌زمینه با حرکت ماوس جابه‌جا شود</small></span><input id="cursorReactive" class="switch" type="checkbox" checked><i></i></label>
+      <label class="switch-row"><span><strong>پس‌زمینهٔ واکنش‌گرا</strong><small>افکت‌های فعلی پس‌زمینه فعال بمانند</small></span><input id="ambientBackground" class="switch" type="checkbox" checked><i></i></label>
+      <label class="switch-row"><span><strong>حلقهٔ سطح صدای میکروفون</strong><small>حلقهٔ فعلی دور دکمهٔ میکروفون نمایش داده شود</small></span><input id="micRing" class="switch" type="checkbox" checked><i></i></label>
+      <label class="switch-row"><span><strong>ویژوالایزر صدای پاسخ</strong><small>نوارهای صدای پاسخ نمایش داده شوند</small></span><input id="responseVisualizer" class="switch" type="checkbox" checked><i></i></label>
+    </section>
+
+    <section class="set-section last">
+      <button class="act reset-btn" id="resetSettings"><svg><use href="#reset"/></svg><span>بازگردانی تنظیمات</span></button>
+      <p class="settings-note">همهٔ این گزینه‌ها محلی ذخیره می‌شوند و برای نسخهٔ فعلی فقط رفتار رابط و قابلیت‌های همین برنامه را کنترل می‌کنند.</p>
+    </section>
+  </div>
+</dialog>
+
+<div id="toast" popover="manual" role="status"></div>
+<script src="orb.js"></script>
+<script src="renderer.js"></script>
+</body>
+</html>

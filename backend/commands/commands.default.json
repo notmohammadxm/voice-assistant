@@ -1,0 +1,362 @@
+[
+  {
+    "id": "greeting",
+    "patterns": ["سلام", "درود", "سلام علیکم", "هی دستیار", "بیدار باش", "هستی اونجا", "صدام می‌شنوی", "سلام دوستم", "سلام می‌کنم", "یه سلام"],
+    "action": "none", "reply": "سلام، در خدمتم"
+  },
+  {
+    "id": "howareyou",
+    "patterns": ["حالت چطوره", "خوبی", "حالت خوبه", "چطوری", "چه خبره", "اوضاعت خوبه", "خوب هستی", "کیفت چطوره", "حال تو چطور", "چطور هستی", "همه چیز خوبه"],
+    "action": "none", "reply": "خوبم، ممنون که پرسیدی"
+  },
+  {
+    "id": "thanks",
+    "patterns": ["ممنون", "مرسی", "دمت گرم", "متشکرم", "ممنونم", "خیلی ممنون", "مرسی ازت", "سپاسگزارم", "تشکر", "آفرین", "ممنون ازت"],
+    "action": "none", "reply": "خواهش می‌کنم"
+  },
+  {
+    "id": "goodbye",
+    "patterns": ["خداحافظ", "فعلا", "بای", "خدانگهدار", "تا بعد", "شب بخیر", "خداحافظ دوستم", "بعداً می‌بینمت", "می‌رم فعلاً", "خداحافظی می‌کنم"],
+    "action": "none", "reply": "خداحافظ، به امید دیدار"
+  },
+  {
+    "id": "whoareyou",
+    "patterns": ["تو کی هستی", "اسمت چیه", "خودتو معرفی کن", "اسم تو چیه", "چه کسی هستی", "تو چی هستی", "کیستی", "چی اسمت هست", "اسمت چی هست", "معرفی کن"],
+    "action": "none", "reply": "من دستیار صوتی شما هستم"
+  },
+
+  {
+    "id": "time",
+    "patterns": ["ساعت چنده", "ساعت چند است", "الان ساعت چنده", "ساعت رو بگو", "چه ساعتیه", "ساعت چند هست", "وقت چنده", "الان چه ساعتیه", "ساعت رو بهم بگو", "الان چند هست", "چند ساعته", "بگو ساعت چند"],
+    "action": "system.say_time", "reply": "الان ساعت {time} است"
+  },
+  {
+    "id": "date",
+    "patterns": ["امروز چندمه", "تاریخ امروز", "امروز چه روزیه", "امروز چه تاریخیه", "تاریخ رو بگو", "چه روزیه امروز", "تاریخ الان چیه", "روز چنده", "چندم هستیم", "امروز چه روزی هست", "تاریخ رو بهم بگو", "بگو تاریخ چنده"],
+    "action": "system.say_date", "reply": "امروز {date} است"
+  },
+
+  {
+    "id": "open_browser",
+    "patterns": ["مرورگر رو باز کن", "اینترنت رو باز کن", "مرورگر باز کن", "کروم باز کن", "edge باز کن", "مرورگرم رو باز کن", "برو اینترنت", "اجرا کن مرورگر", "مرورگر رو روشن کن", "اینترنت باز کن"],
+    "action": "app.open", "params": { "target": "browser" }, "reply": "مرورگر باز شد"
+  },
+  {
+    "id": "open_notepad",
+    "patterns": ["نوت‌پد رو باز کن", "یادداشت باز کن", "دفترچه یادداشت باز کن", "نوتپد باز کن", "یادداشت رو باز کن", "متن نویس باز کن", "نوت باز کن", "یه دفتر باز کن", "notepad رو باز کن", "برنامه یادداشت باز کن"],
+    "action": "app.open", "params": { "target": "notepad" }, "reply": "دفترچه یادداشت باز شد"
+  },
+  {
+    "id": "open_calculator",
+    "patterns": ["ماشین حساب رو باز کن", "حساب‌کتاب باز کن", "ماشین حساب باز کن", "کالکولاتور باز کن", "ماشین‌حساب بیار", "calc رو باز کن", "حساب دستی باز کن", "حسابگر باز کن", "calculator باز کن", "ماشین حساب رو بیار"],
+    "action": "app.open", "params": { "target": "calculator" }, "reply": "ماشین‌حساب باز شد"
+  },
+  {
+    "id": "open_explorer",
+    "patterns": ["فایل اکسپلورر رو باز کن", "مدیریت فایل باز کن", "پوشه‌ها رو باز کن", "explorer باز کن", "فایل منیجر باز کن", "فایل‌هام رو نشون بده", "این کامپیوتر رو باز کن", "my computer باز کن", "فایل‌هام رو باز کن", "file explorer باز کن"],
+    "action": "app.open", "params": { "target": "explorer" }, "reply": "فایل اکسپلورر باز شد"
+  },
+  {
+    "id": "open_cmd",
+    "patterns": ["خط فرمان رو باز کن", "سی ام دی باز کن", "ترمینال باز کن", "cmd باز کن", "command prompt باز کن", "خط فرمان بیا", "پنجره cmd باز کن", "command line باز کن", "کمند پرامپت باز کن"],
+    "action": "app.open", "params": { "target": "cmd" }, "reply": "خط فرمان باز شد"
+  },
+  {
+    "id": "open_powershell",
+    "patterns": ["پاورشل رو باز کن", "powershell باز کن", "پاور شل بیا", "پاورشل اجرا کن", "پاور شل رو باز کن", "windows powershell باز کن"],
+    "action": "app.open", "params": { "target": "powershell" }, "reply": "پاورشل باز شد"
+  },
+  {
+    "id": "open_taskmanager",
+    "patterns": ["تسک منیجر رو باز کن", "مدیریت وظایف رو باز کن", "task manager باز کن", "تسک منیجر بیا", "وظایف سیستم رو نشون بده", "تسک منیجر اجرا کن", "برنامه‌های در حال اجرا رو نشون بده", "taskmgr باز کن"],
+    "action": "app.open", "params": { "target": "taskmanager" }, "reply": "مدیریت وظایف باز شد"
+  },
+  {
+    "id": "open_controlpanel",
+    "patterns": ["کنترل پنل رو باز کن", "پنل کنترل رو باز کن", "control panel باز کن", "کنترل پنل بیا", "تنظیمات کنترل رو باز کن", "panel کنترل رو باز کن"],
+    "action": "app.open", "params": { "target": "controlpanel" }, "reply": "کنترل پنل باز شد"
+  },
+  {
+    "id": "open_settings",
+    "patterns": ["تنظیمات ویندوز رو باز کن", "تنظیمات سیستم رو باز کن", "settings ویندوز رو باز کن", "تنظیمات سیستمی باز کن", "تنظیمات ویندوز بیا", "windows settings باز کن", "تنظیمات رو باز کن"],
+    "action": "app.open", "params": { "target": "settings" }, "reply": "تنظیمات باز شد"
+  },
+  {
+    "id": "open_paint",
+    "patterns": ["پینت رو باز کن", "نقاشی باز کن", "mspaint باز کن", "نقاشی بیا", "برنامه نقاشی باز کن", "paint باز کن"],
+    "action": "app.open", "params": { "target": "paint" }, "reply": "پینت باز شد"
+  },
+  {
+    "id": "open_word",
+    "patterns": ["ورد رو باز کن", "word رو باز کن", "مایکروسافت ورد باز کن", "برنامه ورد باز کن", "ورد بیا", "ms word باز کن", "فایل ورد باز کن"],
+    "action": "app.open", "params": { "target": "word" }, "reply": "ورد باز شد"
+  },
+  {
+    "id": "open_excel",
+    "patterns": ["اکسل رو باز کن", "excel رو باز کن", "مایکروسافت اکسل باز کن", "صفحه گسترده باز کن", "اکسل بیا", "ms excel باز کن"],
+    "action": "app.open", "params": { "target": "excel" }, "reply": "اکسل باز شد"
+  },
+  {
+    "id": "open_powerpoint",
+    "patterns": ["پاورپوینت رو باز کن", "powerpoint رو باز کن", "مایکروسافت پاورپوینت باز کن", "اسلاید ساز باز کن", "پاورپوینت بیا", "ppt باز کن"],
+    "action": "app.open", "params": { "target": "powerpoint" }, "reply": "پاورپوینت باز شد"
+  },
+  {
+    "id": "open_recyclebin",
+    "patterns": ["سطل بازیافت رو باز کن", "سطل آشغال رو باز کن", "recycle bin باز کن", "سطل را باز کن", "سطل زباله رو باز کن"],
+    "action": "app.open", "params": { "target": "recyclebin" }, "reply": "سطل بازیافت باز شد"
+  },
+
+  {
+    "id": "open_downloads",
+    "patterns": ["پوشه دانلود رو باز کن", "دانلودها رو باز کن", "پوشه دانلودم رو باز کن", "downloads رو باز کن", "دانلودهام رو نشون بده", "فایل‌های دانلودم رو باز کن", "برو پوشه دانلود"],
+    "action": "open.folder", "params": { "target": "downloads" }, "reply": "پوشهٔ دانلودها باز شد"
+  },
+  {
+    "id": "open_documents",
+    "patterns": ["پوشه اسناد رو باز کن", "مستندات رو باز کن", "documents رو باز کن", "اسناد رو باز کن", "فایل‌های اسنادم رو نشون بده", "my documents باز کن"],
+    "action": "open.folder", "params": { "target": "documents" }, "reply": "پوشهٔ اسناد باز شد"
+  },
+  {
+    "id": "open_desktop_folder",
+    "patterns": ["پوشه دسکتاپ رو باز کن", "desktop folder باز کن", "محتویات دسکتاپ رو نشون بده", "پوشه صفحه اصلی باز کن", "فایل‌های دسکتاپم رو باز کن"],
+    "action": "open.folder", "params": { "target": "desktop" }, "reply": "پوشهٔ دسکتاپ باز شد"
+  },
+  {
+    "id": "open_pictures",
+    "patterns": ["پوشه تصاویر رو باز کن", "عکس‌ها رو باز کن", "pictures رو باز کن", "تصاویرم رو نشون بده", "عکس‌هام رو باز کن", "گالری عکس رو باز کن"],
+    "action": "open.folder", "params": { "target": "pictures" }, "reply": "پوشهٔ تصاویر باز شد"
+  },
+  {
+    "id": "open_music",
+    "patterns": ["پوشه موزیک رو باز کن", "آهنگ‌ها رو باز کن", "music رو باز کن", "موزیک‌هام رو نشون بده", "آهنگ‌هام رو باز کن", "فایل‌های موسیقی رو باز کن"],
+    "action": "open.folder", "params": { "target": "music" }, "reply": "پوشهٔ موزیک باز شد"
+  },
+  {
+    "id": "open_videos",
+    "patterns": ["پوشه ویدیو رو باز کن", "فیلم‌ها رو باز کن", "videos رو باز کن", "ویدیوهام رو نشون بده", "فیلم‌هام رو باز کن", "ویدیوهام رو باز کن"],
+    "action": "open.folder", "params": { "target": "videos" }, "reply": "پوشهٔ ویدیوها باز شد"
+  },
+
+  {
+    "id": "web_search",
+    "patterns": ["{query} رو سرچ کن", "{query} رو جستجو کن", "در مورد {query} جستجو کن", "{query} رو برام پیدا کن", "{query} رو گوگل کن", "سرچ کن {query}", "جستجو کن {query}", "بزن توی گوگل {query}", "{query} رو توی اینترنت پیدا کن", "برام {query} رو بزن"],
+    "action": "web.search", "reply": "در حال جستجوی {query}"
+  },
+  {
+    "id": "open_youtube",
+    "patterns": ["یوتیوب رو باز کن", "youtube رو باز کن", "یوتیوب بیا", "برو یوتیوب", "یوتیوب باز شه", "ویدیو یوتیوب باز کن"],
+    "action": "web.open_site", "params": { "site": "youtube.com" }, "reply": "یوتیوب باز شد"
+  },
+  {
+    "id": "open_gmail",
+    "patterns": ["جیمیل رو باز کن", "ایمیل رو باز کن", "gmail باز کن", "ایمیلم رو باز کن", "صندوق ایمیل باز کن", "mail.google باز کن"],
+    "action": "web.open_site", "params": { "site": "mail.google.com" }, "reply": "جیمیل باز شد"
+  },
+  {
+    "id": "open_telegram_web",
+    "patterns": ["تلگرام وب رو باز کن", "تلگرام رو باز کن", "telegram باز کن", "تلگرام وب باز کن", "web telegram باز کن", "تلگرام آنلاین باز کن"],
+    "action": "web.open_site", "params": { "site": "web.telegram.org" }, "reply": "تلگرام وب باز شد"
+  },
+  {
+    "id": "open_instagram",
+    "patterns": ["اینستاگرام رو باز کن", "اینستا رو باز کن", "instagram باز کن", "اینستاگرام بیا", "اینستام رو باز کن"],
+    "action": "web.open_site", "params": { "site": "instagram.com" }, "reply": "اینستاگرام باز شد"
+  },
+  {
+    "id": "open_bale",
+    "patterns": ["بله رو باز کن", "اپ بله رو باز کن", "پیام‌رسان بله باز کن", "bale رو باز کن", "بله باز کن"],
+    "action": "web.open_site", "params": { "site": "web.bale.ai" }, "reply": "بله باز شد"
+  },
+  {
+    "id": "open_rubika",
+    "patterns": ["روبیکا رو باز کن", "rubika رو باز کن", "روبیکا باز کن", "اپ روبیکا رو باز کن"],
+    "action": "web.open_site", "params": { "site": "web.rubika.ir" }, "reply": "روبیکا باز شد"
+  },
+  {
+    "id": "open_discord",
+    "patterns": ["دیسکورد رو باز کن", "discord رو باز کن", "دیسکورد بیا", "discord app باز کن"],
+    "action": "web.open_site", "params": { "site": "discord.com/app" }, "reply": "دیسکورد باز شد"
+  },
+  {
+    "id": "open_chatgpt",
+    "patterns": ["چت جی پی تی رو باز کن", "چت‌جی‌پی‌تی رو باز کن", "chatgpt باز کن", "gpt باز کن", "openai باز کن", "هوش مصنوعی openai رو باز کن"],
+    "action": "web.open_site", "params": { "site": "chat.openai.com" }, "reply": "چت‌جی‌پی‌تی باز شد"
+  },
+  {
+    "id": "open_claude",
+    "patterns": ["کلود رو باز کن", "claude باز کن", "claude.ai رو باز کن", "هوش مصنوعی claude رو باز کن"],
+    "action": "web.open_site", "params": { "site": "claude.ai" }, "reply": "کلود باز شد"
+  },
+  {
+    "id": "open_gemini",
+    "patterns": ["جمینای رو باز کن", "جمینی رو باز کن", "gemini باز کن", "gemini google باز کن", "هوش مصنوعی گوگل رو باز کن"],
+    "action": "web.open_site", "params": { "site": "gemini.google.com" }, "reply": "جمینای باز شد"
+  },
+  {
+    "id": "open_url",
+    "patterns": ["سایت {site} رو باز کن", "برو به سایت {site}", "{site} رو باز کن توی مرورگر", "وب‌سایت {site} رو باز کن", "بزن {site}"],
+    "action": "web.open_site", "reply": "در حال باز کردن {site}"
+  },
+
+  {
+    "id": "volume_up",
+    "patterns": ["صدا رو زیاد کن", "صدا رو بیشتر کن", "ولوم رو بالا ببر", "صدا بلندتر کن", "volume رو زیاد کن", "صدا رو اضافه کن", "بلندتر کن", "صدا رو بلند کن", "ولوم بالا", "sound رو بیشتر کن"],
+    "action": "system.volume_up", "reply": "صدا زیاد شد"
+  },
+  {
+    "id": "volume_down",
+    "patterns": ["صدا رو کم کن", "صدا رو کمتر کن", "ولوم رو پایین بیار", "صدا آروم‌تر کن", "volume رو کم کن", "صدا رو کاهش بده", "آروم‌تر کن", "صدا رو کم بکن", "ولوم پایین", "sound رو کمتر کن"],
+    "action": "system.volume_down", "reply": "صدا کم شد"
+  },
+  {
+    "id": "volume_mute",
+    "patterns": ["صدا رو قطع کن", "بی‌صدا کن", "صدا رو میوت کن", "میوت کن", "mute کن", "صدا رو خاموش کن", "صدا رو ببند", "قطع صدا", "بی‌صدا بشه", "صدا off کن"],
+    "action": "system.volume_mute", "reply": "صدا قطع شد"
+  },
+
+  {
+    "id": "media_play_pause",
+    "patterns": ["پخش رو متوقف کن", "آهنگ رو پخش کن", "پلی کن", "پاز کن", "play کن", "pause کن", "موزیک رو پلی کن", "پخش رو شروع کن", "موزیک رو متوقف کن", "play pause"],
+    "action": "media.play_pause", "reply": "باشه"
+  },
+  {
+    "id": "media_next",
+    "patterns": ["آهنگ بعدی", "ترک بعدی", "next track", "بعدی رو پخش کن", "برو آهنگ بعدی", "آهنگ بعد رو بزن", "next song", "بزن آهنگ بعدی"],
+    "action": "media.next", "reply": "آهنگ بعدی پخش شد"
+  },
+  {
+    "id": "media_prev",
+    "patterns": ["آهنگ قبلی", "ترک قبلی", "previous track", "قبلی رو پخش کن", "برو آهنگ قبلی", "آهنگ قبل رو بزن", "prev song", "بزن آهنگ قبلی"],
+    "action": "media.prev", "reply": "آهنگ قبلی پخش شد"
+  },
+
+  {
+    "id": "minimize_all",
+    "patterns": ["همه پنجره‌ها رو کوچیک کن", "پنجره‌ها رو مینیمایز کن", "همه چیز رو کوچیک کن", "minimize all", "همه رو مینیمایز کن", "کوچیک کن همه پنجره‌ها"],
+    "action": "system.minimize_all", "reply": "پنجره‌ها کوچیک شدند"
+  },
+  {
+    "id": "show_desktop",
+    "patterns": ["دسکتاپ رو نشون بده", "برو به دسکتاپ", "show desktop", "صفحه اصلی رو نشون بده", "دسکتاپ رو بیار", "برو صفحه اصلی", "پنجره‌ها رو جمع کن"],
+    "action": "system.show_desktop", "reply": "به دسکتاپ رفتم"
+  },
+  {
+    "id": "screenshot",
+    "patterns": ["اسکرین‌شات بگیر", "از صفحه عکس بگیر", "screenshot بگیر", "صفحه رو عکس بگیر", "capture بگیر", "عکس صفحه بگیر", "print screen بگیر", "از مانیتور عکس بگیر"],
+    "action": "system.screenshot", "reply": "اسکرین‌شات گرفته شد"
+  },
+  {
+    "id": "close_window",
+    "patterns": ["پنجره رو ببند", "برنامه رو ببند", "این پنجره رو ببند", "close window", "پنجره فعلی رو ببند", "ببند این رو", "این برنامه رو ببند", "alt f4 بزن"],
+    "action": "app.close_active", "reply": "پنجره بسته شد"
+  },
+
+  {
+    "id": "lock",
+    "patterns": ["سیستم رو قفل کن", "صفحه رو قفل کن", "lock کن", "کامپیوتر رو قفل کن", "lock screen", "قفل کن سیستم رو", "صفحه نمایش رو قفل کن", "قفل کن"],
+    "action": "system.lock", "reply": "سیستم قفل شد"
+  },
+  {
+    "id": "sleep",
+    "patterns": ["سیستم رو بخوابون", "حالت خواب", "sleep mode", "کامپیوتر رو بخوابون", "hibernate کن", "خواب کن سیستم رو", "برو حالت استراحت"],
+    "action": "system.sleep", "reply": "سیستم به حالت خواب رفت"
+  },
+  {
+    "id": "signout",
+    "patterns": ["از ویندوز خارج شو", "سایین اوت کن", "sign out کن", "از حساب کاربری خارج شو", "log out کن", "logout کن"],
+    "action": "system.signout", "reply": "در حال خروج از حساب کاربری"
+  },
+  {
+    "id": "shutdown",
+    "patterns": ["سیستم رو خاموش کن", "کامپیوتر رو خاموش کن", "shutdown بزن", "خاموش کن سیستم رو", "shutdown کن", "کامپیوتر رو ببند", "سیستم خاموش بشه"],
+    "action": "system.shutdown", "reply": "در حال خاموش کردن سیستم", "confirm": true
+  },
+  {
+    "id": "restart",
+    "patterns": ["سیستم رو ریستارت کن", "کامپیوتر رو ریست کن", "restart بزن", "ریبوت کن", "reboot کن", "راه‌اندازی مجدد کن", "restart کن"],
+    "action": "system.restart", "reply": "در حال راه‌اندازی مجدد سیستم", "confirm": true
+  },
+
+  {
+    "id": "help",
+    "patterns": ["چیکار میتونی بکنی", "راهنما", "چه دستوراتی داری", "کمکم کن", "چی بلدی", "چه قابلیت‌هایی داری", "چه کاری می‌تونی بکنی", "توضیح بده", "help بده", "راهنمایی کن"],
+    "action": "system.help", "reply": "می‌توانم برنامه باز کنم، در وب جستجو کنم، ساعت و تاریخ بگویم، صدا و مدیا را کنترل کنم، تایمر بگذارم و سیستم را خاموش، ریستارت یا قفل کنم"
+  },
+
+  {
+    "id": "dictation_type",
+    "patterns": ["بنویس {text}", "تایپ کن {text}", "این رو بنویس {text}", "type کن {text}", "متن {text} رو بنویس", "برام بنویس {text}", "تایپ {text}"],
+    "action": "text.type", "reply": "الان تایپ می‌کنم، به پنجرهٔ موردنظر برو"
+  },
+
+  {
+    "id": "set_timer",
+    "patterns": ["تایمر بذار برای {duration}", "یادآوری کن بعد از {duration}", "{duration} دیگه یادم بنداز", "آلارم بذار برای {duration}", "بعد از {duration} بهم بگو", "تایمر {duration} بذار", "ریمایندر بذار برای {duration}", "بعد {duration} خبرم کن"],
+    "action": "system.set_timer", "reply": "باشه، تایمر برای {duration} دیگر تنظیم شد"
+  },
+
+  {
+    "id": "repeat_last",
+    "patterns": ["دوباره بگو", "تکرار کن", "یه بار دیگه بگو", "دوباره تکرار کن", "repeat کن", "بازگو کن", "دوباره بگو ببینم"],
+    "action": "meta.repeat", "reply": ""
+  },
+
+  {
+    "id": "net_status",
+    "patterns": ["اینترنت وصله", "وضعیت اینترنت چیه", "اینترنت دارم", "نت وصله", "اینترنت داری", "نت هست", "اتصال اینترنت چطوره", "آنلاین هستم", "اینترنت قطعه", "نت چطوره"],
+    "action": "system.net_status", "reply": "اینترنت {status}"
+  },
+
+  {
+    "id": "en_open_browser",
+    "patterns": ["open browser", "open the browser", "launch browser", "open chrome", "open edge", "open internet"],
+    "action": "app.open", "params": { "target": "browser" }, "reply": "Browser opened"
+  },
+  {
+    "id": "en_search",
+    "patterns": ["search for {query}", "search {query}", "google {query}", "look up {query}", "find {query} online", "search the web for {query}"],
+    "action": "web.search", "reply": "Searching for {query}"
+  },
+  {
+    "id": "en_time",
+    "patterns": ["what time is it", "tell me the time", "what's the time", "current time", "what time is it now"],
+    "action": "system.say_time", "reply": "It's {time}"
+  },
+  {
+    "id": "en_date",
+    "patterns": ["what's today's date", "what is the date", "tell me the date", "what day is it", "today's date"],
+    "action": "system.say_date", "reply": "Today is {date}"
+  },
+  {
+    "id": "en_write",
+    "patterns": ["write {text}", "type {text}", "type out {text}", "write down {text}"],
+    "action": "text.type", "reply": "Typing now, switch to the target window"
+  },
+  {
+    "id": "en_volume_up",
+    "patterns": ["volume up", "turn up the volume", "increase volume", "louder", "make it louder"],
+    "action": "system.volume_up", "reply": "Volume increased"
+  },
+  {
+    "id": "en_volume_down",
+    "patterns": ["volume down", "turn down the volume", "decrease volume", "quieter", "make it quieter"],
+    "action": "system.volume_down", "reply": "Volume decreased"
+  },
+  {
+    "id": "en_lock",
+    "patterns": ["lock the computer", "lock screen", "lock pc", "lock the screen"],
+    "action": "system.lock", "reply": "Screen locked"
+  },
+  {
+    "id": "en_screenshot",
+    "patterns": ["take a screenshot", "screenshot", "capture the screen", "take a screen capture"],
+    "action": "system.screenshot", "reply": "Screenshot taken"
+  },
+
+  {
+    "id": "open_app_custom",
+    "patterns": ["برنامه {target} رو اجرا کن", "اجرا کن {target}", "run {target}", "{target} رو اجرا کن"],
+    "action": "app.open", "reply": "در حال باز کردن {target}"
+  }
+]
