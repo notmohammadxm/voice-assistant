@@ -3,6 +3,7 @@
  * Voice Assistant - Update Server & Management Dashboard
  * Single-file PHP solution: REST API + Dark Mode Modern Admin Panel
  * No login, no database required (self-contained JSON storage)
+ * Supports 3 Targets: Windows (.exe), Linux Debian (.deb), Linux AppImage (.AppImage)
  */
 
 declare(strict_types=1);
@@ -17,20 +18,26 @@ $dataFile = __DIR__ . '/update_config.json';
 $defaultConfig = [
     'win' => [
         'latest_version' => '0.1.3',
-        'download_url'   => 'https://example.com/downloads/Voice_Assistant_Setup_0.1.3.exe',
+        'download_url'   => '',
         'mandatory'      => false,
-        'release_notes'  => 'Initial release with smart Persian and English voice assistant capabilities.'
+        'release_notes'  => 'Voice Assistant Windows release.'
     ],
-    'linux' => [
+    'deb' => [
         'latest_version' => '0.1.3',
-        'download_url'   => 'https://example.com/downloads/voice-assistant_0.1.3_amd64.deb',
+        'download_url'   => '',
         'mandatory'      => false,
-        'release_notes'  => 'Initial Linux release.'
+        'release_notes'  => 'Voice Assistant Linux Debian / Ubuntu (.deb) release.'
+    ],
+    'appimage' => [
+        'latest_version' => '0.1.3',
+        'download_url'   => '',
+        'mandatory'      => false,
+        'release_notes'  => 'Voice Assistant Linux AppImage standalone portable release.'
     ],
     'updated_at' => date('Y-m-d H:i:s')
 ];
 
-// Helper: load config
+// Helper: load config with legacy migration support
 function loadConfig(string $path, array $default): array {
     if (!file_exists($path)) {
         file_put_contents($path, json_encode($default, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
@@ -38,7 +45,24 @@ function loadConfig(string $path, array $default): array {
     }
     $raw = @file_get_contents($path);
     $data = $raw ? json_decode($raw, true) : null;
-    return is_array($data) ? array_replace_recursive($default, $data) : $default;
+    if (!is_array($data)) {
+        return $default;
+    }
+
+    // Migrate legacy 'linux' key to 'deb' if needed
+    if (isset($data['linux']) && !isset($data['deb'])) {
+        $data['deb'] = $data['linux'];
+    }
+    if (!isset($data['appimage'])) {
+        $data['appimage'] = [
+            'latest_version' => $data['deb']['latest_version'] ?? '0.1.3',
+            'download_url'   => '',
+            'mandatory'      => false,
+            'release_notes'  => 'Voice Assistant Linux AppImage release.'
+        ];
+    }
+
+    return array_replace_recursive($default, $data);
 }
 
 // Helper: save config
@@ -56,13 +80,31 @@ if (isset($_GET['action']) && $_GET['action'] === 'check') {
     header('Content-Type: application/json; charset=utf-8');
     header('Access-Control-Allow-Origin: *');
 
-    $clientPlatform = strtolower(trim((string)($_GET['platform'] ?? 'win')));
-    $clientVersion  = trim((string)($_GET['version'] ?? '0.0.0'));
+    $clientVersion = trim((string)($_GET['version'] ?? '0.0.0'));
+    $requestedTarget = strtolower(trim((string)($_GET['target'] ?? $_GET['format'] ?? $_GET['platform'] ?? 'win')));
 
-    // Normalize platform key
-    $platformKey = (strpos($clientPlatform, 'linux') !== false) ? 'linux' : 'win';
-    $targetConfig = $config[$platformKey] ?? $config['win'];
+    // Resolve which target config to query
+    if (strpos($requestedTarget, 'appimage') !== false) {
+        $targetKey = 'appimage';
+        $formatExt = 'appimage';
+    } elseif (strpos($requestedTarget, 'deb') !== false) {
+        $targetKey = 'deb';
+        $formatExt = 'deb';
+    } elseif (strpos($requestedTarget, 'linux') !== false) {
+        $fmt = strtolower(trim((string)($_GET['format'] ?? '')));
+        if ($fmt === 'appimage') {
+            $targetKey = 'appimage';
+            $formatExt = 'appimage';
+        } else {
+            $targetKey = 'deb';
+            $formatExt = 'deb';
+        }
+    } else {
+        $targetKey = 'win';
+        $formatExt = 'exe';
+    }
 
+    $targetConfig = $config[$targetKey] ?? $config['win'];
     $latestVersion = (string)($targetConfig['latest_version'] ?? '0.0.0');
     $isUpdateAvailable = version_compare($latestVersion, $clientVersion, '>');
 
@@ -73,7 +115,8 @@ if (isset($_GET['action']) && $_GET['action'] === 'check') {
         'downloadUrl'     => $targetConfig['download_url'] ?? '',
         'mandatory'       => (bool)($targetConfig['mandatory'] ?? false),
         'releaseNotes'    => $targetConfig['release_notes'] ?? '',
-        'platform'        => $platformKey,
+        'platform'        => $targetKey,
+        'format'          => $formatExt,
         'serverTime'      => date('Y-m-d H:i:s')
     ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
     exit;
@@ -86,18 +129,26 @@ $message = '';
 $messageType = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_settings'])) {
+    // Windows
     $config['win']['latest_version'] = trim((string)($_POST['win_version'] ?? '0.1.3'));
     $config['win']['download_url']   = trim((string)($_POST['win_download_url'] ?? ''));
     $config['win']['release_notes']  = trim((string)($_POST['win_notes'] ?? ''));
     $config['win']['mandatory']      = isset($_POST['win_mandatory']);
 
-    $config['linux']['latest_version'] = trim((string)($_POST['linux_version'] ?? '0.1.3'));
-    $config['linux']['download_url']   = trim((string)($_POST['linux_download_url'] ?? ''));
-    $config['linux']['release_notes']  = trim((string)($_POST['linux_notes'] ?? ''));
-    $config['linux']['mandatory']      = isset($_POST['linux_mandatory']);
+    // Linux Debian (.deb)
+    $config['deb']['latest_version'] = trim((string)($_POST['deb_version'] ?? '0.1.3'));
+    $config['deb']['download_url']   = trim((string)($_POST['deb_download_url'] ?? ''));
+    $config['deb']['release_notes']  = trim((string)($_POST['deb_notes'] ?? ''));
+    $config['deb']['mandatory']      = isset($_POST['deb_mandatory']);
+
+    // Linux AppImage (.AppImage)
+    $config['appimage']['latest_version'] = trim((string)($_POST['appimage_version'] ?? '0.1.3'));
+    $config['appimage']['download_url']   = trim((string)($_POST['appimage_download_url'] ?? ''));
+    $config['appimage']['release_notes']  = trim((string)($_POST['appimage_notes'] ?? ''));
+    $config['appimage']['mandatory']      = isset($_POST['appimage_mandatory']);
 
     if (saveConfig($dataFile, $config)) {
-        $message = 'Settings updated successfully.';
+        $message = 'Settings updated successfully for all platforms.';
         $messageType = 'success';
     } else {
         $message = 'Failed to write configuration file. Please check folder permissions.';
@@ -109,7 +160,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_settings'])) {
 $currentProtocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? "https://" : "http://";
 $currentHost = $_SERVER['HTTP_HOST'] ?? 'localhost';
 $currentScript = $_SERVER['SCRIPT_NAME'] ?? '/update.php';
-$apiEndpointExample = $currentProtocol . $currentHost . $currentScript . '?action=check&version=0.1.3&platform=win';
+$baseUrl = $currentProtocol . $currentHost . $currentScript;
+
+$winEndpoint = $baseUrl . '?action=check&version=0.1.3&platform=win';
+$debEndpoint = $baseUrl . '?action=check&version=0.1.3&platform=deb';
+$appImageEndpoint = $baseUrl . '?action=check&version=0.1.3&platform=appimage';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -129,6 +184,9 @@ $apiEndpointExample = $currentProtocol . $currentHost . $currentScript . '?actio
       --accent: #38bdf8;
       --accent-glow: rgba(56, 189, 248, 0.25);
       --accent-secondary: #818cf8;
+      --win-color: #38bdf8;
+      --deb-color: #f43f5e;
+      --appimage-color: #10b981;
       --text: #f1f5f9;
       --text-muted: #94a3b8;
       --success: #34d399;
@@ -158,9 +216,9 @@ $apiEndpointExample = $currentProtocol . $currentHost . $currentScript . '?actio
     }
 
     .container {
-      max-width: 960px;
+      max-width: 1200px;
       margin: 0 auto;
-      padding: 40px 20px;
+      padding: 40px 24px;
       width: 100%;
       flex: 1;
     }
@@ -283,11 +341,36 @@ $apiEndpointExample = $currentProtocol . $currentHost . $currentScript . '?actio
     }
 
     .api-card-title {
-      font-size: 13px;
-      font-weight: 600;
+      font-size: 12px;
+      font-weight: 700;
       color: var(--accent);
       text-transform: uppercase;
       letter-spacing: 0.05em;
+    }
+
+    .endpoint-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .endpoint-tab-btn {
+      padding: 6px 14px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .endpoint-tab-btn:hover {
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--accent);
+      border-color: rgba(56, 189, 248, 0.4);
     }
 
     .endpoint-code {
@@ -306,12 +389,12 @@ $apiEndpointExample = $currentProtocol . $currentHost . $currentScript . '?actio
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
-      gap: 24px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
       margin-bottom: 32px;
     }
 
-    @media (max-width: 640px) {
+    @media (max-width: 1024px) {
       .grid { grid-template-columns: 1fr; }
     }
 
@@ -323,15 +406,20 @@ $apiEndpointExample = $currentProtocol . $currentHost . $currentScript . '?actio
       backdrop-filter: blur(16px);
       display: flex;
       flex-direction: column;
-      gap: 18px;
+      gap: 16px;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+      transition: border-color 0.2s ease;
+    }
+
+    .panel-card:hover {
+      border-color: rgba(255, 255, 255, 0.16);
     }
 
     .panel-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding-bottom: 16px;
+      padding-bottom: 14px;
       border-bottom: 1px solid var(--card-border);
     }
 
@@ -339,7 +427,7 @@ $apiEndpointExample = $currentProtocol . $currentHost . $currentScript . '?actio
       display: flex;
       align-items: center;
       gap: 10px;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 600;
     }
 
@@ -353,16 +441,22 @@ $apiEndpointExample = $currentProtocol . $currentHost . $currentScript . '?actio
       color: var(--text-muted);
     }
 
+    .badge-win { color: var(--win-color); border-color: rgba(56, 189, 248, 0.3); background: rgba(56, 189, 248, 0.08); }
+    .badge-deb { color: var(--deb-color); border-color: rgba(244, 63, 94, 0.3); background: rgba(244, 63, 94, 0.08); }
+    .badge-appimage { color: var(--appimage-color); border-color: rgba(16, 185, 129, 0.3); background: rgba(16, 185, 129, 0.08); }
+
     .form-group {
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 6px;
     }
 
     label {
-      font-size: 13px;
-      font-weight: 500;
+      font-size: 12px;
+      font-weight: 600;
       color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
     }
 
     input[type="text"],
@@ -371,9 +465,9 @@ $apiEndpointExample = $currentProtocol . $currentHost . $currentScript . '?actio
       background: var(--input-bg);
       border: 1px solid var(--card-border);
       border-radius: 10px;
-      padding: 11px 14px;
+      padding: 10px 14px;
       font-family: 'Inter', sans-serif;
-      font-size: 14px;
+      font-size: 13px;
       color: var(--text);
       transition: all 0.2s ease;
     }
@@ -387,22 +481,23 @@ $apiEndpointExample = $currentProtocol . $currentHost . $currentScript . '?actio
 
     textarea {
       resize: vertical;
-      min-height: 80px;
-      line-height: 1.5;
+      min-height: 75px;
+      line-height: 1.45;
     }
 
     .checkbox-row {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       cursor: pointer;
       user-select: none;
-      padding: 4px 0;
+      padding: 6px 0;
+      margin-top: 4px;
     }
 
     .checkbox-row input[type="checkbox"] {
-      width: 18px;
-      height: 18px;
+      width: 17px;
+      height: 17px;
       accent-color: var(--accent);
       cursor: pointer;
     }
@@ -414,13 +509,18 @@ $apiEndpointExample = $currentProtocol . $currentHost . $currentScript . '?actio
 
     .actions-bar {
       display: flex;
-      justify-content: flex-end;
+      justify-content: space-between;
       align-items: center;
       gap: 16px;
+      padding: 16px 24px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      margin-top: 8px;
     }
 
     .last-updated {
-      font-size: 12px;
+      font-size: 13px;
       color: var(--text-muted);
     }
 
@@ -430,7 +530,7 @@ $apiEndpointExample = $currentProtocol . $currentHost . $currentScript . '?actio
       font-weight: 600;
       font-size: 14px;
       border: none;
-      padding: 12px 28px;
+      padding: 12px 32px;
       border-radius: 12px;
       cursor: pointer;
       transition: all 0.2s ease;
@@ -453,8 +553,9 @@ $apiEndpointExample = $currentProtocol . $currentHost . $currentScript . '?actio
       text-align: center;
       font-size: 12px;
       color: var(--text-muted);
-      padding: 24px;
+      padding: 28px;
       border-top: 1px solid var(--card-border);
+      margin-top: 40px;
     }
   </style>
 </head>
@@ -469,12 +570,12 @@ $apiEndpointExample = $currentProtocol . $currentHost . $currentScript . '?actio
         </div>
         <div class="brand-text">
           <h1>Voice Assistant</h1>
-          <p>Update Distribution Server</p>
+          <p>Multi-Platform Update Distribution Server</p>
         </div>
       </div>
       <div class="server-status">
         <div class="status-dot"></div>
-        <span>Endpoint Online</span>
+        <span>REST API Live</span>
       </div>
     </header>
 
@@ -486,11 +587,16 @@ $apiEndpointExample = $currentProtocol . $currentHost . $currentScript . '?actio
 
     <div class="api-card">
       <div class="api-card-header">
-        <span class="api-card-title">Live API Check Endpoint</span>
-        <a href="<?= htmlspecialchars($apiEndpointExample) ?>" target="_blank" style="font-size: 12px; color: var(--accent); text-decoration: none;">Test JSON Output &rarr;</a>
+        <span class="api-card-title">Live API Endpoints</span>
+        <span style="font-size: 12px; color: var(--text-muted);">Click to test target JSON:</span>
+      </div>
+      <div class="endpoint-tabs">
+        <a class="endpoint-tab-btn" href="<?= htmlspecialchars($winEndpoint) ?>" target="_blank">Windows Test API &rarr;</a>
+        <a class="endpoint-tab-btn" href="<?= htmlspecialchars($debEndpoint) ?>" target="_blank">Linux Debian (.deb) Test API &rarr;</a>
+        <a class="endpoint-tab-btn" href="<?= htmlspecialchars($appImageEndpoint) ?>" target="_blank">Linux AppImage Test API &rarr;</a>
       </div>
       <div class="endpoint-code">
-        <?= htmlspecialchars($apiEndpointExample) ?>
+        <?= htmlspecialchars($baseUrl) ?>?action=check&amp;version=0.1.3&amp;platform=[win | deb | appimage]
       </div>
     </div>
 
@@ -498,89 +604,122 @@ $apiEndpointExample = $currentProtocol . $currentHost . $currentScript . '?actio
       <input type="hidden" name="save_settings" value="1">
 
       <div class="grid">
-        <!-- Windows Configuration -->
+        <!-- 1. Windows Configuration -->
         <div class="panel-card">
           <div class="panel-header">
             <div class="panel-title">
-              <svg style="width: 20px; height: 20px; fill: currentColor;" viewBox="0 0 24 24">
+              <svg style="width: 18px; height: 18px; fill: var(--win-color);" viewBox="0 0 24 24">
                 <path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801"/>
               </svg>
-              <span>Windows Build</span>
+              <span>Windows</span>
             </div>
-            <span class="panel-badge">NSIS Installer</span>
+            <span class="panel-badge badge-win">NSIS .exe</span>
           </div>
 
           <div class="form-group">
             <label for="win_version">Latest Version</label>
-            <input type="text" id="win_version" name="win_version" value="<?= htmlspecialchars((string)$config['win']['latest_version']) ?>" required placeholder="e.g. 0.1.4">
+            <input type="text" id="win_version" name="win_version" value="<?= htmlspecialchars((string)($config['win']['latest_version'] ?? '0.1.3')) ?>" required placeholder="0.1.4">
           </div>
 
           <div class="form-group">
-            <label for="win_download_url">Installer Download URL (.exe)</label>
-            <input type="text" id="win_download_url" name="win_download_url" value="<?= htmlspecialchars((string)$config['win']['download_url']) ?>" required placeholder="https://yourdomain.com/downloads/Voice_Assistant_Setup_0.1.4.exe">
+            <label for="win_download_url">Download URL (.exe)</label>
+            <input type="text" id="win_download_url" name="win_download_url" value="<?= htmlspecialchars((string)($config['win']['download_url'] ?? '')) ?>" placeholder="https://.../Voice_Assistant_Setup_0.1.4.exe">
           </div>
 
           <div class="form-group">
-            <label for="win_notes">Release Notes / Changelog</label>
-            <textarea id="win_notes" name="win_notes" placeholder="Describe improvements and bug fixes..."><?= htmlspecialchars((string)$config['win']['release_notes']) ?></textarea>
+            <label for="win_notes">Changelog / Release Notes</label>
+            <textarea id="win_notes" name="win_notes" placeholder="Release notes for Windows..."><?= htmlspecialchars((string)($config['win']['release_notes'] ?? '')) ?></textarea>
           </div>
 
           <label class="checkbox-row">
             <input type="checkbox" name="win_mandatory" <?= !empty($config['win']['mandatory']) ? 'checked' : '' ?>>
-            <span class="checkbox-label">Mandatory Update (Force install)</span>
+            <span class="checkbox-label">Mandatory (Force update)</span>
           </label>
         </div>
 
-        <!-- Linux Configuration -->
+        <!-- 2. Linux Debian (.deb) Configuration -->
         <div class="panel-card">
           <div class="panel-header">
             <div class="panel-title">
-              <svg style="width: 20px; height: 20px; fill: currentColor;" viewBox="0 0 24 24">
+              <svg style="width: 18px; height: 18px; fill: var(--deb-color);" viewBox="0 0 24 24">
                 <path d="M12.003 0c-2.455 0-4.446 1.991-4.446 4.446 0 1.341.597 2.544 1.543 3.355C5.836 8.647 3.328 11.758 3.328 15.556c0 .878.139 1.722.396 2.518C1.558 19.123 0 21.378 0 24h24c0-2.622-1.558-4.877-3.724-5.926.257-.796.396-1.64.396-2.518 0-3.798-2.508-6.909-5.772-7.755.946-.811 1.543-2.014 1.543-3.355C16.449 1.991 14.458 0 12.003 0z"/>
               </svg>
-              <span>Linux Build</span>
+              <span>Linux Debian</span>
             </div>
-            <span class="panel-badge">Debian / RPM</span>
+            <span class="panel-badge badge-deb">Debian .deb</span>
           </div>
 
           <div class="form-group">
-            <label for="linux_version">Latest Version</label>
-            <input type="text" id="linux_version" name="linux_version" value="<?= htmlspecialchars((string)$config['linux']['latest_version']) ?>" required placeholder="e.g. 0.1.4">
+            <label for="deb_version">Latest Version</label>
+            <input type="text" id="deb_version" name="deb_version" value="<?= htmlspecialchars((string)($config['deb']['latest_version'] ?? '0.1.3')) ?>" required placeholder="0.1.4">
           </div>
 
           <div class="form-group">
-            <label for="linux_download_url">Package Download URL (.deb / .rpm)</label>
-            <input type="text" id="linux_download_url" name="linux_download_url" value="<?= htmlspecialchars((string)$config['linux']['download_url']) ?>" required placeholder="https://yourdomain.com/downloads/voice-assistant_0.1.4_amd64.deb">
+            <label for="deb_download_url">Download URL (.deb)</label>
+            <input type="text" id="deb_download_url" name="deb_download_url" value="<?= htmlspecialchars((string)($config['deb']['download_url'] ?? '')) ?>" placeholder="https://.../voice-assistant_0.1.4_amd64.deb">
           </div>
 
           <div class="form-group">
-            <label for="linux_notes">Release Notes / Changelog</label>
-            <textarea id="linux_notes" name="linux_notes" placeholder="Describe improvements and bug fixes..."><?= htmlspecialchars((string)$config['linux']['release_notes']) ?></textarea>
+            <label for="deb_notes">Changelog / Release Notes</label>
+            <textarea id="deb_notes" name="deb_notes" placeholder="Release notes for Debian/Ubuntu..."><?= htmlspecialchars((string)($config['deb']['release_notes'] ?? '')) ?></textarea>
           </div>
 
           <label class="checkbox-row">
-            <input type="checkbox" name="linux_mandatory" <?= !empty($config['linux']['mandatory']) ? 'checked' : '' ?>>
-            <span class="checkbox-label">Mandatory Update (Force install)</span>
+            <input type="checkbox" name="deb_mandatory" <?= !empty($config['deb']['mandatory']) ? 'checked' : '' ?>>
+            <span class="checkbox-label">Mandatory (Force update)</span>
+          </label>
+        </div>
+
+        <!-- 3. Linux AppImage (.AppImage) Configuration -->
+        <div class="panel-card">
+          <div class="panel-header">
+            <div class="panel-title">
+              <svg style="width: 18px; height: 18px; fill: var(--appimage-color);" viewBox="0 0 24 24">
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+              </svg>
+              <span>Linux AppImage</span>
+            </div>
+            <span class="panel-badge badge-appimage">Portable .AppImage</span>
+          </div>
+
+          <div class="form-group">
+            <label for="appimage_version">Latest Version</label>
+            <input type="text" id="appimage_version" name="appimage_version" value="<?= htmlspecialchars((string)($config['appimage']['latest_version'] ?? '0.1.3')) ?>" required placeholder="0.1.4">
+          </div>
+
+          <div class="form-group">
+            <label for="appimage_download_url">Download URL (.AppImage)</label>
+            <input type="text" id="appimage_download_url" name="appimage_download_url" value="<?= htmlspecialchars((string)($config['appimage']['download_url'] ?? '')) ?>" placeholder="https://.../Voice-Assistant-0.1.4.AppImage">
+          </div>
+
+          <div class="form-group">
+            <label for="appimage_notes">Changelog / Release Notes</label>
+            <textarea id="appimage_notes" name="appimage_notes" placeholder="Release notes for AppImage..."><?= htmlspecialchars((string)($config['appimage']['release_notes'] ?? '')) ?></textarea>
+          </div>
+
+          <label class="checkbox-row">
+            <input type="checkbox" name="appimage_mandatory" <?= !empty($config['appimage']['mandatory']) ? 'checked' : '' ?>>
+            <span class="checkbox-label">Mandatory (Force update)</span>
           </label>
         </div>
       </div>
 
       <div class="actions-bar">
-        <span class="last-updated">Last saved: <?= htmlspecialchars((string)$config['updated_at']) ?></span>
+        <span class="last-updated">Last saved: <strong><?= htmlspecialchars((string)($config['updated_at'] ?? 'Never')) ?></strong></span>
         <button type="submit" class="btn-primary">
           <svg style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2;" viewBox="0 0 24 24">
             <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
             <polyline points="17 21 17 13 7 13 7 21"></polyline>
             <polyline points="7 3 7 8 15 8"></polyline>
           </svg>
-          <span>Save Changes</span>
+          <span>Save All Settings</span>
         </button>
       </div>
     </form>
   </div>
 
   <footer>
-    Voice Assistant Open Source &bull; Simple Single-File Update Server
+    Voice Assistant &bull; Standalone Single-File Multi-Target Update System
   </footer>
 </body>
 </html>

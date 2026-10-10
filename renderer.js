@@ -445,7 +445,7 @@
     } else if (data.state === 'error') {
       b.disabled = false;
       b.classList.remove('busy');
-      $('ut').textContent = 'بروزرسانی در دسترس نیست';
+      $('ut').textContent = data.message || 'بروزرسانی در دسترس نیست';
     }
   });
   all('a.help-link-btn, [data-l]').forEach((el) => {
